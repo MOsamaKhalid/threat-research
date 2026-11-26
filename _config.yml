@@ -1,0 +1,27 @@
+title: "Cyb3r_N1nj4 // Threat Research"
+tagline: "Malware reverse engineering, detection engineering and threat hunting notes"
+description: "Technical write-ups on malware observed in the wild: execution chains, IOCs, YARA and Sigma detections, mapped to MITRE ATT&CK."
+author: "CyberNinja (Cyb3r_N1nj4)"
+github_user: MOsamaKhalid
+rules_repo: "https://github.com/MOsamaKhalid/Malware_Analysis"
+baseurl: "/threat-research"
+url: "https://mosamakhalid.github.io"
+
+permalink: /:year/:month/:title/
+timezone: Asia/Karachi
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
