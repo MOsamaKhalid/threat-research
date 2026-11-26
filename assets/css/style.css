@@ -101,3 +101,12 @@ hr{border:0;border-top:1px solid var(--line);margin:38px 0}
   .grid{grid-template-columns:1fr}
   .post{padding-top:34px}
 }
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;margin:26px 0 34px}
+.stats div{border:1px solid var(--line);border-radius:12px;
+  background:var(--panel);padding:14px 16px}
+.stats b{display:block;font-family:var(--mono);font-size:22px;
+  color:var(--accent);line-height:1.2}
+.stats span{display:block;font-size:13px;color:var(--muted);margin-top:5px}
+.post ol a{text-decoration:none}
+.post ol a:hover{text-decoration:underline}
