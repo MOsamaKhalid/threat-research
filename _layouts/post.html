@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<article class="post">
+  <header class="post-head">
+    <p class="kicker">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %B %Y" }}</time>
+      {% if page.family %}<span class="sep">·</span><span class="tag">{{ page.family }}</span>{% endif %}
+    </p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.tags %}
+    <p class="tags">{% for t in page.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+    {% endif %}
+  </header>
+  {{ content }}
+</article>
+<p class="back"><a href="{{ '/' | relative_url }}">&larr; All posts</a></p>
