@@ -2,28 +2,81 @@
 layout: default
 ---
 <section class="hero">
-  <h1>{{ site.title }}</h1>
-  <p class="lede">{{ site.tagline }}</p>
-  <p class="muted">Execution chains, recovered indicators, and the detections written from them. Every write-up here concerns activity that is already public or observed against publicly reachable infrastructure.</p>
+  <p class="eyebrow">Malware analysis · Reverse engineering · Detection engineering · DFIR</p>
+  <h1 class="wordmark">Cyb3r<span class="accent">_N1nj4</span></h1>
+  <p class="lede">Write-ups on malware caught during threat hunting — how the chain executes,
+  what came back out of memory, and the detections built from it.</p>
+  <p class="muted">Already-public campaigns and activity against publicly reachable
+  infrastructure only. Anything tied to an internal estate stays unpublished.</p>
 </section>
 
+<section class="filters" aria-label="Filter posts by topic">
+  <button class="chip chip-on" data-filter="all" type="button">
+    All posts <span class="count">{{ site.posts.size }}</span>
+  </button>
+  {% assign fams = site.posts | map: "family" | compact | uniq | sort %}
+  {% for f in fams %}
+    {% assign n = site.posts | where: "family", f | size %}
+    <button class="chip" data-filter="{{ f | slugify }}" type="button">
+      {{ f }} <span class="count">{{ n }}</span>
+    </button>
+  {% endfor %}
+</section>
 <section class="posts">
-  <h2>Write-ups</h2>
+  <div class="posts-head">
+    <h2>Latest write-ups</h2>
+    <span class="muted" id="shown">{{ site.posts.size }} post{% if site.posts.size != 1 %}s{% endif %}</span>
+  </div>
+
   {% if site.posts.size == 0 %}
-  <p class="muted">No posts published yet.</p>
+    <p class="muted">Nothing published yet.</p>
   {% endif %}
-  <ul class="post-list">
+
+  <div class="grid">
   {% for post in site.posts %}
-    <li>
-      <a class="post-link" href="{{ post.url | relative_url }}">
+    <article class="card" data-family="{{ post.family | slugify }}">
+      <a class="card-link" href="{{ post.url | relative_url }}">
         <p class="kicker">
-          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %b %Y" }}</time>
-          {% if post.family %}<span class="sep">·</span><span class="tag">{{ post.family }}</span>{% endif %}
+          {% if post.family %}<span class="fam">{{ post.family }}</span>{% endif %}
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
         </p>
         <h3>{{ post.title }}</h3>
-        {% if post.summary %}<p class="excerpt">{{ post.summary }}</p>{% endif %}
+        {% if post.summary %}<p class="excerpt">{{ post.summary | truncate: 190 }}</p>{% endif %}
+        {% if post.tags %}
+        <p class="tags">{% for t in post.tags limit: 4 %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+        {% endif %}
+        <span class="read">Read the analysis &rarr;</span>
       </a>
-    </li>
+    </article>
   {% endfor %}
-  </ul>
+  </div>
+
+  <p class="muted empty" id="empty" hidden>No posts in that category yet.</p>
 </section>
+<script>
+(function () {
+  var chips = document.querySelectorAll('.chip');
+  var cards = document.querySelectorAll('.card');
+  var shown = document.getElementById('shown');
+  var empty = document.getElementById('empty');
+
+  function apply(filter) {
+    var n = 0;
+    cards.forEach(function (c) {
+      var match = filter === 'all' || c.dataset.family === filter;
+      c.hidden = !match;
+      if (match) { n++; }
+    });
+    shown.textContent = n + (n === 1 ? ' post' : ' posts');
+    empty.hidden = n !== 0;
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      chips.forEach(function (c) { c.classList.remove('chip-on'); });
+      chip.classList.add('chip-on');
+      apply(chip.dataset.filter);
+    });
+  });
+})();
+</script>
